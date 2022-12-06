@@ -1,51 +1,22 @@
-import http from "http";
-import express from "express";
-import logger from "morgan";
+// start.js setup from learnnode.com by Wes Bos
+import express from 'express';
+import * as dotenv from 'dotenv';
+dotenv.config({ path: '.env' });
 import cors from "cors";
-import socketio from "socket.io";
-// mongo connection
-import "./config/mongo.js";
-// socket configuration
-import WebSockets from "./utils/WebSockets.js";
-// routes
-import indexRouter from "./routes/index.js";
-import userRouter from "./routes/user.js";
-import chatRoomRouter from "./routes/chatRoom.js";
-import deleteRouter from "./routes/delete.js";
-// middlewares
-import { decode } from './middlewares/jwt.js'
+import messagesrouter from './routes/messages.js';
 
 const app = express();
 
-/** Get port from environment and store in Express. */
-const port = process.env.PORT || "3003";
-app.set("port", port);
-
-app.use(logger("dev"));
+// support json encoded and url-encoded bodies, mainly used for post and update
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 
-app.use("/", indexRouter);
-app.use("/users", userRouter);
-app.use("/room", decode, chatRoomRouter);
-app.use("/delete", deleteRouter);
+app.use(cors("Access-Control-Allow-Origin: *"))
 
-/** catch 404 and forward to error handler */
-app.use('*', (req, res) => {
-  return res.status(404).json({
-    success: false,
-    message: 'API endpoint doesnt exist'
-  })
-});
+// app.get('/', (req, res) => res.status(200).send())
+app.use('/', messagesrouter);
 
-/** Create HTTP server. */
-const server = http.createServer(app);
-/** Create socket connection */
-global.io = socketio.listen(server);
-global.io.on('connection', WebSockets.connection)
-/** Listen on provided port, on all network interfaces. */
-server.listen(port);
-/** Event listener for HTTP server "listening" event. */
-server.on("listening", () => {
-  console.log(`Listening on port:: http://localhost:${port}/`)
+app.set('port', process.env.PORT || 3003);
+const server = app.listen(app.get('port'), () => {
+  console.log(`🍿 Express running → PORT ${server.address().port}`);
 });
