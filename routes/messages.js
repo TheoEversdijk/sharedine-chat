@@ -1,5 +1,6 @@
 import express from 'express';
 import { getMessages, setMessages, editMessage, removeMessage } from '../controllers/MessagesController.js';
+import { getChats, setChat, editChat, removeChat } from '../controllers/ChatsController.js';
 const router = express.Router();
 
 /**
@@ -23,12 +24,20 @@ router.get('/', (req, res, next) => {
   res.json('Connection with the chat messages database has been made');
 });
 
+router.get('/chat', getChats);
+
+router.post('/chat', setChat);
+
+router.put('/chat', editChat);
+
+router.delete('/chat', removeChat);
+
 router.get('/chat/:id', getMessages);
 
 router.post('/chat/:id', setMessages);
 
 router.put('/chat/:id', editMessage);
 
-// router.delete('/appointments/:id', removeAppointment);
+router.delete('/chat/:id', removeMessage);
 
 export default router;

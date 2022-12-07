@@ -16,7 +16,7 @@ app.use(cors("Access-Control-Allow-Origin: *"))
 // app.get('/', (req, res) => res.status(200).send())
 app.use('/', messagesrouter);
 
-app.set('port', process.env.PORT || 3003);
+app.set('port', process.env.PORT || 3004);
 const server = app.listen(app.get('port'), () => {
   console.log(`🍿 Express running → PORT ${server.address().port}`);
 });

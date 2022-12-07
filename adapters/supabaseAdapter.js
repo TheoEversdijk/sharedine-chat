@@ -4,10 +4,10 @@ dotenv.config({ path: '.env' });
 
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY)
 
-export async function getMessagesFromSupabase(id) {
-  console.log('Adapter: Fetching data from chat', id)
-  // return all data from the supabase appointments table
-  const { data, error } = await supabase.from('chat_messages').select('*').eq('chat_id', id)
+// CHAT MESSAGES
+export async function getMessagesFromSupabase(message) {
+  console.log('Adapter: Fetching data from chat', message.chat_id)
+  const { data, error } = await supabase.from('chat_messages').select('*').eq('chat_id', message.chat_id)
   if (error) console.error('query error', error);
   else return data;
 }
@@ -25,19 +25,66 @@ export async function writeMessagesToSupabase(message) {
   else return data;
 }
 
-export async function editMessageData(mess, message) {
-  console.log('editing message');
+export async function editMessageData(message) {
+  console.log('Adapter: editing message');
   const { data, error } = await supabase.from('chat_messages').update([
     {
       message: message.message,
       chat_id: message.chat_id,
       owner_id: message.owner_id
     },
-  ]).eq('id', mess);
+  ]).eq('id', message.mess_id);
   if (error) console.log('query error', error);
   else return data;
 }
 
-export async function removeMessageData() {
-  console.log('removing message');
+export async function removeMessageData(message) {
+  console.log('Adapter: removing message');
+  const { data, error } = await supabase.from('chat_messages').delete().eq('id', message.mess_id);
+  if (error) console.log('query error', error);
+  else return data;
+}
+
+// CHATS
+export async function getChatsFromSupabase() {
+  console.log('Adapter: Fetching chats')
+  const { data, error } = await supabase.from('chats').select('*')
+  if (error) console.error('query error', error);
+  else return data;
+}
+
+export async function writeChatToSupabase(message) {
+  console.log('Adapter: writing Chat');
+  const { data, error } = await supabase.from('chats').insert([
+    {
+      owner_id: message.owner_id,
+      members: message.members
+    },
+  ]);
+  if (error) console.log('query error', error);
+  else return data;
+}
+
+export async function editChatData(message) {
+  console.log('Adapter: editing chat');
+  const { data, error } = await supabase.from('chats').update([
+    {
+      owner_id: message.owner_id,
+      members: message.members,
+      id: message.chat_id
+    },
+  ]).eq('id', message.chat_id);
+  if (error) console.log('query error', error);
+  else return data;
+}
+
+export async function removeChatData(message) {
+  console.log('Adapter: removing chat');
+  const { data2, error2 } = await supabase.from('chat_messages').delete().eq('chat_id', message.chat_id);
+  if (error2) console.log('query error', error2);
+  else {
+  const { data, error } = await supabase.from('chats').delete().eq('id', message.chat_id);
+  if (error) console.log('query error', error);
+  else return data2, data;
+}
 }
