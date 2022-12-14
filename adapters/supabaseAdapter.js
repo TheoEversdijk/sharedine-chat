@@ -58,7 +58,8 @@ export async function writeChatToSupabase(message) {
   const { data, error } = await supabase.from('chats').insert([
     {
       owner_id: message.owner_id,
-      members: message.members
+      created_at: message.createdat,
+      name: message.meal
     },
   ]);
   if (error) console.log('query error', error);
@@ -69,9 +70,7 @@ export async function editChatData(message) {
   console.log('Adapter: editing chat');
   const { data, error } = await supabase.from('chats').update([
     {
-      owner_id: message.owner_id,
-      members: message.members,
-      id: message.chat_id
+      name: message.meal
     },
   ]).eq('id', message.chat_id);
   if (error) console.log('query error', error);
@@ -87,4 +86,15 @@ export async function removeChatData(message) {
   if (error) console.log('query error', error);
   else return data2, data;
 }
+}
+
+export async function registerChatData(message) {
+  console.log('Adapter: Register chat');
+  const { data, error } = await supabase.from('chats').update([
+    {
+      members: [message.members],
+    },
+  ]).eq('id', message.chat_id);
+  if (error) console.log('query error', error);
+  else return data;
 }
