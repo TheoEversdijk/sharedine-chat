@@ -17,9 +17,9 @@ export async function getChats(req, res, next) {
 export async function setChat(req, res, next) {
     console.log('Controller: Set Chat')
     const message = {};
-    if (req.query.owner_id && req.query.createdat && req.query.meal) {
+    if (req.query.owner_id && req.query.appointment_id && req.query.meal) {
         message.owner_id = req.query.owner_id;
-        message.createdat = req.query.createdat;
+        message.appointment_id = req.query.appointment_id;
         message.meal = req.query.meal;
         await writeChatToSupabase(message)
         res.json({

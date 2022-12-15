@@ -58,7 +58,7 @@ export async function writeChatToSupabase(message) {
   const { data, error } = await supabase.from('chats').insert([
     {
       owner_id: message.owner_id,
-      created_at: message.createdat,
+      appointment_id: message.appointment_id,
       name: message.meal
     },
   ]);
