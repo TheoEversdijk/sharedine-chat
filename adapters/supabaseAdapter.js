@@ -53,6 +53,18 @@ export async function getChatsFromSupabase() {
   else return data;
 }
 
+export async function joinChat(chat) {
+  console.log('Trying to join chatroom')
+  console.log(chat);
+  const { data, error } = await supabase.from('chats').update([
+    {
+      members: [chat.members]
+    },
+  ]).eq('appointment_id', chat.appointment_id);
+  if (error) console.error('query error', error);
+  else return data;
+}
+
 export async function writeChatToSupabase(message) {
   console.log('Adapter: writing Chat');
   const { data, error } = await supabase.from('chats').insert([
@@ -88,13 +100,13 @@ export async function removeChatData(message) {
 }
 }
 
-export async function registerChatData(message) {
-  console.log('Adapter: Register chat');
-  const { data, error } = await supabase.from('chats').update([
-    {
-      members: [message.members],
-    },
-  ]).eq('id', message.chat_id);
-  if (error) console.log('query error', error);
-  else return data;
-}
+// export async function registerChatData(message) {
+//   console.log('Adapter: Register chat');
+//   const { data, error } = await supabase.from('chats').update([
+//     {
+//       members: [message.members],
+//     },
+//   ]).eq('id', message.chat_id);
+//   if (error) console.log('query error', error);
+//   else return data;
+// }

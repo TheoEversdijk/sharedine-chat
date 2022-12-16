@@ -3,13 +3,24 @@ import {
     writeChatToSupabase,
     editChatData,
     removeChatData,
-    registerChatData
+    joinChat
 } from '../adapters/supabaseAdapter.js'
 
 // Function that shows chats from chat_messages database
 export async function getChats(req, res, next) {
     console.log('Controller: Get Chats')
     const getChatsData = await getChatsFromSupabase();
+    res.json(getChatsData)
+}
+
+// Function that shows chats from chat_messages database
+export async function joinChatByAppointment(req, res, next) {
+    console.log('Controller: Get Chats with appointment_id')
+    const chat = {
+        appointment_id: req.query.appointment_id,
+        members: req.query.member
+    };
+    const getChatsData = await joinChat(chat);
     res.json(getChatsData)
 }
 
@@ -76,19 +87,19 @@ export async function removeChat(req, res, next) {
     }
 }
 
-export async function registerChat(req, res, next) {
-    console.log('Controller: Register chat')
-    const message = {};
-    if (req.query.members && req.params.id) {
-        message.members = req.query.members
-        message.chat_id = req.params.id
-        await registerChatData(message);
-        res.json({ message: `Registered for ${req.params.id}` });
-    } else {
-        res.status(422);
-        res.json({
-            title: 'cannot remove chat',
-            message: `You need to input a chat_id`,
-        });
-    }
-}
+// export async function registerChat(req, res, next) {
+//     console.log('Controller: Register chat')
+//     const message = {};
+//     if (req.query.members && req.params.id) {
+//         message.members = req.query.members
+//         message.chat_id = req.params.id
+//         await registerChatData(message);
+//         res.json({ message: `Registered for ${req.params.id}` });
+//     } else {
+//         res.status(422);
+//         res.json({
+//             title: 'cannot remove chat',
+//             message: `You need to input a chat_id`,
+//         });
+//     }
+// }

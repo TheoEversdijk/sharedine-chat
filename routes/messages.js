@@ -1,6 +1,6 @@
 import express from 'express';
 import { getMessages, setMessages, editMessage, removeMessage } from '../controllers/MessagesController.js';
-import { getChats, setChat, editChat, removeChat, registerChat } from '../controllers/ChatsController.js';
+import { getChats, setChat, editChat, removeChat, joinChatByAppointment } from '../controllers/ChatsController.js';
 const router = express.Router();
 
 /**
@@ -32,6 +32,8 @@ router.put('/chat', editChat);
 
 router.delete('/chat', removeChat);
 
+router.put('/chat/register', joinChatByAppointment);
+
 router.get('/chat/:id', getMessages);
 
 router.post('/chat/:id', setMessages);
@@ -39,7 +41,5 @@ router.post('/chat/:id', setMessages);
 router.put('/chat/:id', editMessage);
 
 router.delete('/chat/:id', removeMessage);
-
-router.put('/chat/:id/register', registerChat);
 
 export default router;
