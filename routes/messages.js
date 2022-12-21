@@ -1,4 +1,5 @@
 import express from 'express';
+import bodyParser from 'body-parser';
 import { getMessages, setMessages, editMessage, removeMessage } from '../controllers/MessagesController.js';
 import { getChats, setChat, editChat, removeChat, joinChatByAppointment } from '../controllers/ChatsController.js';
 const router = express.Router();
@@ -18,28 +19,24 @@ const router = express.Router();
   res.sendStatus(200);
 });
 
+const jsonParser = bodyParser.json()
 
+router.get('/', jsonParser, getChats);
 
-router.get('/', (req, res, next) => {
-  res.json('Connection with the chat messages database has been made');
-});
+router.post('/', jsonParser, setChat);
 
-router.get('/chat', getChats);
+router.put('/', jsonParser, editChat);
 
-router.post('/chat', setChat);
+router.delete('/', jsonParser, removeChat);
 
-router.put('/chat', editChat);
+router.put('/register', jsonParser, joinChatByAppointment);
 
-router.delete('/chat', removeChat);
+router.get('/:id', jsonParser, getMessages);
 
-router.put('/chat/register', joinChatByAppointment);
+router.post('/:id', jsonParser, setMessages);
 
-router.get('/chat/:id', getMessages);
+router.put('/:id', jsonParser, editMessage);
 
-router.post('/chat/:id', setMessages);
-
-router.put('/chat/:id', editMessage);
-
-router.delete('/chat/:id', removeMessage);
+router.delete('/:id', jsonParser, removeMessage);
 
 export default router;

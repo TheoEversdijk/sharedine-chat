@@ -17,8 +17,8 @@ export async function getChats(req, res, next) {
 export async function joinChatByAppointment(req, res, next) {
     console.log('Controller: Get Chats with appointment_id')
     const chat = {
-        appointment_id: req.query.appointment_id,
-        members: req.query.member
+        appointment_id: req.body.appointment_id,
+        members: req.body.member
     };
     const getChatsData = await joinChat(chat);
     res.json(getChatsData)
@@ -28,10 +28,10 @@ export async function joinChatByAppointment(req, res, next) {
 export async function setChat(req, res, next) {
     console.log('Controller: Set Chat')
     const message = {};
-    if (req.query.owner_id && req.query.appointment_id && req.query.meal) {
-        message.owner_id = req.query.owner_id;
-        message.appointment_id = req.query.appointment_id;
-        message.meal = req.query.meal;
+    if (req.body.owner_id && req.body.appointment_id && req.body.meal) {
+        message.owner_id = req.body.owner_id;
+        message.appointment_id = req.body.appointment_id;
+        message.meal = req.body.meal;
         await writeChatToSupabase(message)
         res.json({
             title: 'Chat added',
@@ -47,14 +47,14 @@ export async function setChat(req, res, next) {
 }
 
 // Function that edits chat in chat_messages database
-export async function editChat(req, res, next) {
+export async function editChat(req, res) {
     console.log('Controller: Edit chat')
     const message = {};
-    if (req.query.chat_id && req.query.meal) {
-        // message.owner_id = req.query.owner_id;
-        message.chat_id = req.query.chat_id;
-        // message.createdat = req.query.createdat;
-        message.meal = req.query.meal;
+    if (req.body.chat_id && req.body.meal) {
+        // message.owner_id = req.body.owner_id;
+        message.chat_id = req.body.chat_id;
+        // message.createdat = req.body.createdat;
+        message.meal = req.body.meal;
         await editChatData(message)
         res.json({
             title: 'Chat Edited',
@@ -74,10 +74,10 @@ export async function editChat(req, res, next) {
 export async function removeChat(req, res, next) {
     console.log('Controller: Remove chat')
     const message = {};
-    if (req.query.chat_id) {
-        message.chat_id = req.query.chat_id
+    if (req.body.chat_id) {
+        message.chat_id = req.body.chat_id
         await removeChatData(message);
-        res.json({ message: `Removed ${req.query.chat_id}` });
+        res.json({ message: `Removed ${req.body.chat_id}` });
     } else {
         res.status(422);
         res.json({
@@ -90,8 +90,8 @@ export async function removeChat(req, res, next) {
 // export async function registerChat(req, res, next) {
 //     console.log('Controller: Register chat')
 //     const message = {};
-//     if (req.query.members && req.params.id) {
-//         message.members = req.query.members
+//     if (req.body.members && req.params.id) {
+//         message.members = req.body.members
 //         message.chat_id = req.params.id
 //         await registerChatData(message);
 //         res.json({ message: `Registered for ${req.params.id}` });

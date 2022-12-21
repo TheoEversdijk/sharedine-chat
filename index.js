@@ -9,12 +9,13 @@ const app = express();
 
 // support json encoded and url-encoded bodies, mainly used for post and update
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 app.use(cors("Access-Control-Allow-Origin: *"))
 
 // app.get('/', (req, res) => res.status(200).send())
-app.use('/', messagesrouter);
+app.get('/', (req, res) => res.status(200).send("ShareDine UserAPI"))
+
+app.use('/chat', cors(), messagesrouter)
 
 app.set('port', process.env.PORT || 3004);
 const server = app.listen(app.get('port'), () => {
