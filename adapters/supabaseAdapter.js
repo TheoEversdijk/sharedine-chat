@@ -53,12 +53,19 @@ export async function getChatsFromSupabase() {
   else return data;
 }
 
+export async function getChatFromSupabase(id) {
+  console.log('Adapter: Fetching chat')
+  const { data, error } = await supabase.from('chats').select('*').eq('appointment_id', id)
+  if (error) console.error('query error', error);
+  else return data[0];
+}
+
 export async function joinChat(chat) {
   console.log('Trying to join chatroom')
   console.log(chat);
   const { data, error } = await supabase.from('chats').update([
     {
-      members: [chat.members]
+      members: chat.members
     },
   ]).eq('appointment_id', chat.appointment_id);
   if (error) console.error('query error', error);

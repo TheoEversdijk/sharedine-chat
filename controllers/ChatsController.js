@@ -3,6 +3,7 @@ import {
     writeChatToSupabase,
     editChatData,
     removeChatData,
+    getChatFromSupabase,
     joinChat
 } from '../adapters/supabaseAdapter.js'
 
@@ -16,9 +17,12 @@ export async function getChats(req, res, next) {
 // Function that shows chats from chat_messages database
 export async function joinChatByAppointment(req, res, next) {
     console.log('Controller: Get Chats with appointment_id')
+    const findChat = await getChatFromSupabase(req.body.appointment_id);
+    let members = findChat.members;
+    members.push(req.body.member);
     const chat = {
-        appointment_id: req.body.appointment_id,
-        members: req.body.member
+        appointment_id: findChat.appointment_id,
+        members: members
     };
     const getChatsData = await joinChat(chat);
     res.json(getChatsData)
