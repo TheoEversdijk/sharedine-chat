@@ -28,10 +28,10 @@ export async function getMessages(req, res, next) {
 export async function setMessages(req, res, next) {
     console.log('Controller: Set message')
     const message = {};
-    if (req.query.message && req.query.owner_id && req.params.id) {
-        message.message = req.query.message;
+    if (req.body.message && req.body.owner_id && req.params.id) {
+        message.message = req.body.message;
         message.chat_id = req.params.id;
-        message.owner_id = req.query.owner_id; // TODO: DON'T DO OWNER_ID VIA QUERY
+        message.owner_id = req.body.owner_id; // TODO: DON'T DO OWNER_ID VIA QUERY
         await writeMessagesToSupabase(message)
         res.json({
             title: 'Message added',
