@@ -36,6 +36,7 @@ export async function setChat(req, res, next) {
         message.owner_id = req.body.owner_id;
         message.appointment_id = req.body.appointment_id;
         message.meal = req.body.meal;
+        message.members = [];
         await writeChatToSupabase(message)
         res.json({
             title: 'Chat added',
