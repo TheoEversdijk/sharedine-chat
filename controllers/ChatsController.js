@@ -76,13 +76,28 @@ export async function editChat(req, res) {
 
 // Function that removes chat in chat_messages database
 // TODO: ONLY DO IF USER IS OWNER
+// export async function removeChat(req, res, next) {
+//     console.log('Controller: Remove chat')
+//     const message = {};
+//     if (req.body.chat_id) {
+//         message.chat_id = req.body.chat_id
+//         await removeChatData(message);
+//         res.json({ message: `Removed ${req.body.chat_id}` });
+//     } else {
+//         res.status(422);
+//         res.json({
+//             title: 'cannot register',
+//             message: `You need to input a chat_id`,
+//         });
+//     }
+// }
 export async function removeChat(req, res, next) {
     console.log('Controller: Remove chat')
     const message = {};
-    if (req.body.chat_id) {
-        message.chat_id = req.body.chat_id
+    if (req.query.chat_id) {
+        message.chat_id = req.query.chat_id
         await removeChatData(message);
-        res.json({ message: `Removed ${req.body.chat_id}` });
+        res.json({ message: `Removed ${req.query.chat_id}` });
     } else {
         res.status(422);
         res.json({
